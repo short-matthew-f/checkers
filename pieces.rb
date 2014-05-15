@@ -13,20 +13,16 @@ class Piece
   end
   
   def to_s
-    if self.is_a?(Pawn)
-      self.color == :red ? "r" : "b"
+    if self.is_a?(King)
+      self.color == :red ? "✪" : "✪"
     else
-      self.color == :red ? "R" : "B"
+      self.color == :red ? "◎" : "◎"
     end
   end
   
 end
 
-class Pawn < Piece
-  
-end
-
-class RedPiece < Pawn
+class RedPiece < Piece
   DELTAS = [
     [-1, -1], [-1, 1]
   ]
@@ -37,7 +33,7 @@ class RedPiece < Pawn
   end
 end
 
-class BlackPiece < Pawn
+class BlackPiece < Piece
   DELTAS = [
     [1, -1], [1, 1]
   ]  

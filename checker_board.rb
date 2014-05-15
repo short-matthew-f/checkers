@@ -23,9 +23,15 @@ class CheckerBoard
   end
   
   def to_s
-    @grid.map do |row|
-      row.map do |col|
-        col ? "#{col}" : " "
+    @grid.each_with_index.map do |row, r_index|
+      row.each_with_index.map do |col, c_index|
+        bg_color = (r_index + c_index) % 2 == 0 ? :white : :cyan
+        
+        if col.is_a?(Piece)
+          " #{col} ".colorize(col.color)
+        else
+          "   "
+        end.colorize(background: bg_color)
       end.join
     end.join("\n")
   end
