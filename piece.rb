@@ -1,4 +1,6 @@
 class Piece
+  attr_reader :pos, :board, :color
+  
   def initialize(pos, board)
     @pos = pos
     @board = board
@@ -11,18 +13,20 @@ class Piece
   end
   
   def to_s
-    case self.class
-    when RedPiece
-      "r"
-    when BlackPiece
-      "b"
-    when King
+    if self.is_a?(Pawn)
+      self.color == :red ? "r" : "b"
+    else
       self.color == :red ? "R" : "B"
     end
   end
+  
 end
 
-class RedPiece < Piece
+class Pawn < Piece
+  
+end
+
+class RedPiece < Pawn
   DELTAS = [
     [-1, -1], [-1, 1]
   ]
@@ -33,7 +37,7 @@ class RedPiece < Piece
   end
 end
 
-class BlackPiece < Piece
+class BlackPiece < Pawn
   DELTAS = [
     [1, -1], [1, 1]
   ]  

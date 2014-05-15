@@ -8,33 +8,35 @@ class CheckerBoard
   end
   
   def initialize
-    @board = setup_board
-    
+    @grid = Array.new(8) { Array.new(8) }
+    add_pieces_to_grid
   end
   
   def [](pos)
     x, y = pos
-    @board[x][y]
+    @grid[x][y]
   end
   
   def []=(pos, piece)
     x, y = pos
-    @board[x][y] = piece
+    @grid[x][y] = piece
+  end
+  
+  def to_s
+    @grid.map do |row|
+      row.map do |col|
+        col ? "#{col}" : " "
+      end.join
+    end.join("\n")
   end
   
   protected
   
-  def setup_board
-    board = Array.new(8) { Array.new(8) }
-    
-    add_pieces_to(board)
-  end
-  
-  def add_pieces_to(board)
+  def add_pieces_to_grid
     (0..2).each do |row|
       [0, 2, 4, 6].each do |col|
-        BlackPiece.new([row, col + (1 - row % 2)])
-        RedPiece.new([5 + row, col + row % 2])
+        BlackPiece.new([row, col + (1 - row % 2)], self)
+        RedPiece.new([5 + row, col + row % 2], self)
       end
     end
   end
