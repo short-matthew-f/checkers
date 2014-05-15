@@ -93,8 +93,8 @@ class Piece
   # can_jump_to?(target) requires more logic, so we build up our checks
   
   def pieces_between(source, target)
-    number_of_spaces = (differential(source, target)[0]).abs - 1
     dir = smallest_vec(source, target)
+    number_of_spaces = (differential(source, target)[0])/dir[0] - 1
     
     [].tap do |empties|
       (1..number_of_spaces).each do |i|
@@ -147,7 +147,8 @@ end
 
 class RedPawn < Piece
   DELTAS = [
-    [-1, -1], [-1, 1]
+    [-2, -1], [-2, 1],
+    [-1, 2], [-1, -2]
   ]
   
   def initialize(pos, board)
