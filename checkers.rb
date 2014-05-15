@@ -8,7 +8,9 @@ class Checkers
   
   def initialize
     @board = CheckerBoard.new
+    @board.add_pieces_to_grid
     @players = [:red, :black]
+    @error_message = nil
   end
   
   def play
@@ -23,16 +25,42 @@ class Checkers
   def player_turn
     begin
       player_input = get_player_input
-      position_list = parse_input(player_input) if valid_input?(player_input)
+      
+      if valid_input?(player_input)
+        sequence = position_list(player_input)
+      else
+        raise CheckersErrors::WhatDidYouTypeError
+      end
+      
+      piece_to_move = @board[sequence.first]
+      
+      if piece_to_move.color != current_player
+        raise CheckersErrors::NotYourPieceError
+      end
+
+      piece_to_move.perform_moves(sequence)
+      
+      if !piece_to_move.is_a?(King) && piece_to_move.is_in_heaven?
+        @board.promote(sequence.last)
+      end
+          
     rescue StandardError => e
-      puts e.message
+      @error_message = e.message
       retry
     end
   end
   
   def get_player_input
-    puts "Please enter the position of the piece and where"
+    system("clear")
+    puts "\n\n"
+    puts @board
+    
+    puts "\n" + "#{@error_message}".red.blink if @error_message
+    @error_message = nil
+    
+    puts "\n#{current_player.capitalize}, please enter the position of the piece and where"
     puts "you want it to jump.  (e.g. c3-d4 or c3-e5-c7)"
+    print "> "
     gets.chomp.upcase
   end
   
@@ -63,9 +91,13 @@ class Checkers
     @players.last
   end
   
+  def game_over?
+    false
+  end
+  
 end
 
 if __FILE__ == $PROGRAM_NAME
-  game = Game.new
+  game = Checkers.new
   game.play
 end

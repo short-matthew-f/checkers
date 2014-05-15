@@ -25,7 +25,6 @@ class CheckerBoard
   
   def initialize
     @grid = Array.new(8) { Array.new(8) }
-    add_pieces_to_grid
   end
   
   def [](pos)
