@@ -114,13 +114,13 @@ class Piece
   
   def can_jump_to?(target)
     c_pos = self.pos
-    vec = differential(c_pos, target)
     dir = smallest_vec(c_pos, target)
+    num_jumps = differential(c_pos, target)[0] / dir[0]
   
     #debugger
   
     deltas.include?(dir)      && 
-      vec[0].even?            && 
+      num_jumps.even?         && 
       board.is_empty?(target) &&
       only_an_enemy_halfway?(c_pos, target)
   end
@@ -147,6 +147,7 @@ end
 
 class RedPawn < Piece
   DELTAS = [
+    # [-1, -1], [-1, 1]
     [-2, -1], [-2, 1],
     [-1, 2], [-1, -2]
   ]
